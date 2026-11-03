@@ -23,7 +23,7 @@ You can install `hemispheR` from CRAN:
 install.packages('hemispheR')
 ```
 
-You can install the development version of `hemispheR` using `devtools`:
+You can install this forked development version of `hemispheR` using `devtools`:
 
 ``` r
 # install.packages("devtools")

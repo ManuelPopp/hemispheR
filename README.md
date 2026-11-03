@@ -27,7 +27,7 @@ You can install the development version of `hemispheR` using `devtools`:
 
 ``` r
 # install.packages("devtools")
-devtools::install_git("https://gitlab.com/fchianucci/hemispheR")
+devtools::install_git("https://github.com/ManuelPopp/hemispheR")
 ```
 
 # Import a fisheye image

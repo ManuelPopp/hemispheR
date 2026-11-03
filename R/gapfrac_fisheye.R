@@ -109,9 +109,9 @@ gapfrac_fisheye <- function(img.bw,
   #azimuth theta:
   imgdf$theta <- NA
   # imgdf$theta <- atan2(imgdf$dy,imgdf$dx) #East-conterclockwise
-  imgdf$theta <- base::atan2(imgdf$dx,imgdf$dy) #North-clockwise count
-  imgdf$theta[imgdf$theta<0] <- imgdf$theta[imgdf$theta<0] + 2*pi #rescale range to 0-2 pi instead of -pi, pi
-  imgdf$theta<-imgdf$theta*180/pi #convert to degree
+  imgdf$theta <- base::atan2(imgdf$dx, imgdf$dy) #North-clockwise count
+  imgdf$theta[imgdf$theta<0] <- imgdf$theta[imgdf$theta<0] + 2 * pi #rescale range to 0-2 pi instead of -pi, pi
+  imgdf$theta <- imgdf$theta * 180 / pi #convert to degree
 
 
   startVZA=startVZA
@@ -119,12 +119,17 @@ gapfrac_fisheye <- function(img.bw,
   maxVZA=maxVZA
 
   # no. zenith rings
-  nrings=nrings
+  nrings = nrings
+  calibration_file <- system.file(
+    "data", "lens_data",
+    package = "hemispheR"
+  )
 
-  list.lenses<-c("equidistant","orthographic","stereographic","equisolid", sort(c("FC-E8","FC-E9","Sigma-4.5","Nikkor-OP10","Nikkor-10.5","Sigma-8","Nikkor-8","Soligor","Raynox-CF185","CanonEF-8-15","Kodak-SP360","Entaniya-M12-280","Canon-RF-5.2","Entaniya-HAL-200","Entaniya-HAL-250","Entaniya-M12-250","Entaniya-M12-220","Meike-3.5","Meike-6.5","Laowa-4","iZugar-MKX200","iZugar-MKX22","iZugar-MKX13","iZugar-MKX19","DZO-VRCA","Sunex-DSL315","Sunex-DSL239","Sunex-DSL415","Sunex-DSLR01","Lensagon-BF10M14522S118","Lensagon-BF16M220D","Omnitech-ORIFL190-3","Aico-ACHIR01028B10M","Aico-ACHIR01420B9M","SMTEC-SL-190","Evetar-E3307","Evetar-E3267A","Evetar-E3279","ArduCam-M25156H18","Bosch-Flexidome-7000")))
-
+  lens_table <- read.csv(calibration_file)
+  list.lenses <- lens_table$lens
+  
   if (length(setdiff(lens, list.lenses)) > 0 | is.null(lens)){
-    stop(cat('Unknown lens type. Allowed lenses are:\n"',sep='',paste0(list.lenses,collapse='",\n"'),'".'))
+    stop(cat('Unknown lens type. Allowed lenses are:\n"', sep = '', paste0(list.lenses, collapse = '",\n"'), '".'))
   }
   lens_params <- lens_table[lens_table$lens == lens, ]
   if (nrow(lens_params) == 0) {
@@ -235,7 +240,7 @@ gapfrac_fisheye <- function(img.bw,
   }
 
 
-  rdfw<-cbind(rdfw,metadf)
+  rdfw <- cbind(rdfw,metadf)
 
   if (display == TRUE){
     terra::plot(img.bw,col=c('black','white'), main='applied rings & segments',legend=FALSE)

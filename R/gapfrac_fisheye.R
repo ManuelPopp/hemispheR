@@ -131,6 +131,10 @@ gapfrac_fisheye <- function(img.bw,
     rset<-round(rc*VZAbins/maxVZA)
   }
 
+  if (lens == "Samyang 12mm") {
+    VZAbins<-seq(startVZA,endVZA,(endVZA-startVZA)/nrings)
+    rset<-round(rc*(0.70053015*(VZAbins*pi/180)-0.01094141*(VZAbins*pi/180)^2+0.04528802*(VZAbins*pi/180)^3))
+  }
   #From Pekin & Macfarlane 2009 (doi:10.3390/rs1041298). Note: it gives relative distance y based on relative distance theta:
   if (lens=="FC-E8") {
     VZAbins<-seq(startVZA,endVZA,(endVZA-startVZA)/nrings)

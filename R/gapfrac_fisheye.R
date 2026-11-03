@@ -81,23 +81,23 @@ gapfrac_fisheye <- function(img.bw,
 
   # p<-terra::as.points(img.bw, values=TRUE)
   # imgdf <- cbind(terra::crds(p), terra::values(p))
-  imgdf<-terra::as.data.frame(img.bw, xy=TRUE)
-  base::names(imgdf)<-c('x','y','value')
+  imgdf <- terra::as.data.frame(img.bw, xy = TRUE)
+  base::names(imgdf) <- c('x', 'y', 'value')
 
   #calculate back xc,yc,rc:
   xc=round(mean(imgdf$x))
   yc=round(mean(imgdf$y))
 
-  if(length(unique(terra::values(img.bw)))==2){
-    rc=round(sqrt(xc^2+yc^2))-2
-    if(message==TRUE){
-      message(paste('Used parameters xc, yc and rc are',xc,yc,rc,sep=", "))
+  if(length(unique(terra::values(img.bw))) == 2){
+    rc = round(sqrt(xc^2 + yc^2)) - 2
+    if(message == TRUE){
+      message(paste('Used parameters xc, yc and rc are', xc, yc, rc, sep = ", "))
     }}
 
-  if(length(unique(terra::values(img.bw)))==3){
-    rc=round((max(imgdf$x)-min(imgdf$x))/2)
-    if(message==TRUE){
-      message(paste('Used parameters xc, yc and rc are',xc,yc,rc,sep=", "))
+  if(length(unique(terra::values(img.bw))) == 3){
+    rc=round((max(imgdf$x) - min(imgdf$x)) / 2)
+    if(message == TRUE){
+      message(paste('Used parameters xc, yc and rc are', xc, yc, rc, sep = ", "))
     }}
 
   #convert cartesian to polar coordinates
@@ -163,12 +163,12 @@ gapfrac_fisheye <- function(img.bw,
   )
   
   #8 azimuth segments
-  nseg=nseg
+  nseg = nseg
 
   #define the sector of the image based on the rdf:
   options(dplyr.summarise.inform=FALSE)
 
-  rdf<-imgdf |>
+  rdf <- imgdf |>
     dplyr::mutate(ring=cut(r,rset,include.lowest=TRUE,labels=seq(startVZA+((endVZA-startVZA)/2/nrings),endVZA-((endVZA-startVZA)/2/nrings),(endVZA-startVZA)/nrings)))|>
     # dplyr::mutate(ring=cut(r,rset,include.lowest=TRUE,labels=seq(setVZA/nrings,setVZA,setVZA/nrings)))|>
     tidyr::drop_na(ring) |>
@@ -186,7 +186,7 @@ gapfrac_fisheye <- function(img.bw,
     # )) |>
     dplyr::relocate(ring,alpha.from)
 
-  rdfw<-rdf |>
+  rdfw <- rdf |>
     tidyr::pivot_wider(id_cols=ring,names_from=c('alpha.from','alpha.to'),values_from='GF',names_prefix='GF') |>
     dplyr::mutate(id=base::names(img.bw),lens=lens) |>
     dplyr::mutate(circ=paste(xc,yc,rc, sep='_')) |>
@@ -237,7 +237,7 @@ gapfrac_fisheye <- function(img.bw,
 
   rdfw<-cbind(rdfw,metadf)
 
-  if (display==TRUE){
+  if (display == TRUE){
     terra::plot(img.bw,col=c('black','white'), main='applied rings & segments',legend=FALSE)
     #TODO
     for (j in 1:length(rset)){
